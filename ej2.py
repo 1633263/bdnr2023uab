@@ -80,7 +80,8 @@ if args.bd==None:
                 editorial_prov['coleccions']=[publicacio['NomColleccio']]
                 editorials[publicacio['NomEditorial']]=editorial_prov
             else:
-                editorials[publicacio['NomEditorial']]['coleccions'].append(publicacio['NomColleccio'])
+                if publicacio['NomColleccio'] not in editorials[publicacio['NomEditorial']]['coleccions']:
+                    editorials[publicacio['NomEditorial']]['coleccions'].append(publicacio['NomColleccio'])
                 
         if publicacio['NomColleccio'] not in lista_ids_col:
             coleccio_prov={}
@@ -104,6 +105,7 @@ if args.bd==None:
             publicacio_prov['num_pagines']=publicacio['num_pagines']
             publicacio_prov['guionistes']=publicacio['guionistes']
             publicacio_prov['dibuixants']=publicacio['dibuixants']
+            publicacio_prov['id_coleccio']=publicacio['NomColleccio']
             publicacions.append(publicacio_prov)
     
     if args.file is not None:
@@ -176,6 +178,10 @@ else:
     collection_list = bd.list_collection_names()
     for collection in collection_list:
         bd[collection].drop()
+
+print(list(publi.find()))
+print(list(col.find()))
+print(list(edit.find()))
 
 conn.close()
     
