@@ -60,7 +60,6 @@ if args.bd==None:
             data_col.append(dict_row)
         
         for publicacio in data_col:
-
             if publicacio['NomEditorial'] not in lista_ids_edit:
                 editorial_prov={}
                 if publicacio['NomEditorial'] not in editorials:
@@ -94,8 +93,8 @@ if args.bd==None:
                 publicacio_prov['autor']=publicacio['autor']
                 publicacio_prov['preu']=publicacio['preu']
                 publicacio_prov['num_pagines']=publicacio['num_pagines']
-                publicacio_prov['guionistes']=publicacio['guionistes']
-                publicacio_prov['dibuixants']=publicacio['dibuixants']
+                publicacio_prov['guionistes']=publicacio['guionistes'][1:len(publicacio['guionistes'])-1].split(', ')
+                publicacio_prov['dibuixants']=publicacio['dibuixants'][1:len(publicacio['dibuixants'])-1].split(', ')
                 publicacio_prov['id_coleccio']=publicacio['NomColleccio']
                 publicacions.append(publicacio_prov)
         
