@@ -1,30 +1,26 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Mar 20 20:16:24 2023
-
-@author: Joel
-"""
 
 from pymongo import MongoClient
 import pandas as pd
 import argparse
+
 ################################## PARAMETRES DE CONNEXIÓ ###################################
 
 Host = 'localhost' 
 Port = 27017
 
-
 ###################################### CONNEXIÓ ##############################################
 
 DSN = "mongodb://{}:{}".format(Host,Port)
-
 conn = MongoClient(DSN)
-
 
 ############################# TRANSFERÈNCIA DE DADES AMB MONGO ##############################
 
+<<<<<<< HEAD
+bd = conn['Projecte']
+=======
 
 bd = conn['projecte']
+>>>>>>> ac71c95691e8581cd1cf14a12f0b955ab6d8f216
 try:col=bd.create_collection('coleccions')
 except:col=bd['coleccions']
 try:edit=bd.create_collection('editorials')
@@ -39,7 +35,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--file', type=str)
 parser.add_argument('-delete_all','--bd',type=str)
 args = parser.parse_args()
-print(args)
 if args.bd==None:
     try:
         coleccions={}
@@ -70,12 +65,19 @@ if args.bd==None:
             data_col.append(dict_row)
         
         for publicacio in data_col:
+<<<<<<< HEAD
+=======
             
+>>>>>>> ac71c95691e8581cd1cf14a12f0b955ab6d8f216
             if publicacio['NomEditorial'] not in lista_ids_edit:
                 editorial_prov={}
                 if publicacio['NomEditorial'] not in editorials:
                     editorial_prov['_id']=publicacio['NomEditorial']
+<<<<<<< HEAD
+                    editorial_prov['responsable']=publicacio['responsable']
+=======
                     editorial_prov['responsable']=publicacio['resposable']
+>>>>>>> ac71c95691e8581cd1cf14a12f0b955ab6d8f216
                     editorial_prov['adreca']=publicacio['adreca']
                     editorial_prov['pais']=publicacio['pais']
                     editorial_prov['coleccions']=[publicacio['NomColleccio']]
@@ -89,7 +91,11 @@ if args.bd==None:
                 if publicacio['NomColleccio'] not in coleccions:
                     coleccio_prov['_id']=publicacio['NomColleccio']
                     coleccio_prov['total_exemplars']=publicacio['total_exemplars']
+<<<<<<< HEAD
+                    coleccio_prov['genere']=publicacio['genere'][1:len(publicacio['genere'])-1].split(', ')
+=======
                     coleccio_prov['genere']=publicacio['genere']
+>>>>>>> ac71c95691e8581cd1cf14a12f0b955ab6d8f216
                     coleccio_prov['idioma']=publicacio['idioma']
                     coleccio_prov['any_inici']=publicacio['any_inici']
                     coleccio_prov['any_fi']=publicacio['any_fi']
@@ -104,8 +110,13 @@ if args.bd==None:
                 publicacio_prov['autor']=publicacio['autor']
                 publicacio_prov['preu']=publicacio['preu']
                 publicacio_prov['num_pagines']=publicacio['num_pagines']
+<<<<<<< HEAD
+                publicacio_prov['guionistes']=publicacio['guionistes'][1:len(publicacio['guionistes'])-1].split(', ')
+                publicacio_prov['dibuixants']=publicacio['dibuixants'][1:len(publicacio['dibuixants'])-1].split(', ')
+=======
                 publicacio_prov['guionistes']=publicacio['guionistes']
                 publicacio_prov['dibuixants']=publicacio['dibuixants']
+>>>>>>> ac71c95691e8581cd1cf14a12f0b955ab6d8f216
                 publicacio_prov['id_coleccio']=publicacio['NomColleccio']
                 publicacions.append(publicacio_prov)
         
@@ -154,7 +165,10 @@ if args.bd==None:
                 artista_prov['pais']=artista['pais']
                 artistes.append(artista_prov)
         
+<<<<<<< HEAD
+=======
         
+>>>>>>> ac71c95691e8581cd1cf14a12f0b955ab6d8f216
         coleccions_list=[]
         for key in coleccions:
             coleccions_list.append(coleccions[key])
