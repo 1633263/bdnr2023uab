@@ -96,6 +96,7 @@ if args.bd==None:
                 publicacio_prov['guionistes']=publicacio['guionistes'][1:len(publicacio['guionistes'])-1].split(', ')
                 publicacio_prov['dibuixants']=publicacio['dibuixants'][1:len(publicacio['dibuixants'])-1].split(', ')
                 publicacio_prov['id_coleccio']=publicacio['NomColleccio']
+                publicacio_prov['editorial']=publicacio['NomEditorial']
                 publicacions.append(publicacio_prov)
         
         if args.file is not None:
