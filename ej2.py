@@ -52,8 +52,6 @@ if args.bd==None:
         excel_def=list(excel_col.columns)
         data_col = []
         for i, row in excel_col.iterrows():
-            if i == 0:
-                continue
             dict_row = {}
             for j, value in enumerate(row):
                 dict_row[excel_def[j]] = value
@@ -104,8 +102,6 @@ if args.bd==None:
         excel_def=list(excel_pers.columns)
         data_pers = []
         for i, row in excel_pers.iterrows():
-            if i == 0:
-                continue
             dict_row = {}
             for j, value in enumerate(row):
                 dict_row[excel_def[j]] = value
@@ -127,8 +123,6 @@ if args.bd==None:
         excel_def=list(excel_artist.columns)
         data_artist = []
         for i, row in excel_artist.iterrows():
-            if i == 0:
-                continue
             dict_row = {}
             for j, value in enumerate(row):
                 dict_row[excel_def[j]] = value
