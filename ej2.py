@@ -62,16 +62,12 @@ if args.bd==None:
         for publicacio in data_col:
             if publicacio['NomEditorial'] not in lista_ids_edit:
                 editorial_prov={}
-                if publicacio['NomEditorial'] not in editorials:
-                    editorial_prov['_id']=publicacio['NomEditorial']
-                    editorial_prov['responsable']=publicacio['resposable']
-                    editorial_prov['adreca']=publicacio['adreca']
-                    editorial_prov['pais']=publicacio['pais']
-                    editorial_prov['coleccions']=[publicacio['NomColleccio']]
-                    editorials[publicacio['NomEditorial']]=editorial_prov
-                else:
-                    if publicacio['NomColleccio'] not in editorials[publicacio['NomEditorial']]['coleccions']:
-                        editorials[publicacio['NomEditorial']]['coleccions'].append(publicacio['NomColleccio'])
+                editorial_prov['_id']=publicacio['NomEditorial']
+                editorial_prov['responsable']=publicacio['resposable']
+                editorial_prov['adreca']=publicacio['adreca']
+                editorial_prov['pais']=publicacio['pais']
+                #editorial_prov['coleccions']=[publicacio['NomColleccio']]
+                editorials[publicacio['NomEditorial']]=editorial_prov
                     
             if publicacio['NomColleccio'] not in lista_ids_col:
                 coleccio_prov={}
@@ -83,7 +79,11 @@ if args.bd==None:
                     coleccio_prov['any_inici']=publicacio['any_inici']
                     coleccio_prov['any_fi']=publicacio['any_fi']
                     coleccio_prov['tancada']=publicacio['tancada']
+                    coleccio_prov['editorials']=[publicacio['NomEditorial']]
                     coleccions[publicacio['NomColleccio']]=coleccio_prov
+                else:
+                    if publicacio['NomEditorial'] not in coleccions[publicacio['NomColleccio']]['editorials']:
+                        coleccions[publicacio['NomColleccio']]['editorials'].append(publicacio['NomEditorial'])
             
             if publicacio['ISBN'] not in lista_ids_publi:
                 publicacio_prov={}
