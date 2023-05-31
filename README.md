@@ -1,2 +1,2 @@
 # bdnr2023uab
-Projecte de BDNR
+Projecte de MongoDB de BDNR
