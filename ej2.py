@@ -1,25 +1,17 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Mar 20 20:16:24 2023
-
-@author: Joel
-"""
 
 from pymongo import MongoClient
 import pandas as pd
 import argparse
+
 ################################## PARAMETRES DE CONNEXIÓ ###################################
 
 Host = 'dcccluster.uab.es' 
 Port = 8201
 
-
 ###################################### CONNEXIÓ ##############################################
 
 DSN = "mongodb://{}:{}".format(Host,Port)
-
 conn = MongoClient(DSN)
-
 
 ############################# TRANSFERÈNCIA DE DADES AMB MONGO ##############################
 
@@ -41,7 +33,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--file', type=str)
 parser.add_argument('-delete_all','--bd',type=str)
 args = parser.parse_args()
-print(args)
 
 
 if args.bd==None:
@@ -72,8 +63,6 @@ if args.bd==None:
         excel_def=list(excel_col.columns)
         data_col = []
         for i, row in excel_col.iterrows():
-            if i == 0:
-                continue
             dict_row = {}
             for j, value in enumerate(row):
                 dict_row[excel_def[j]] = value
@@ -84,19 +73,13 @@ if args.bd==None:
             #com que el nom de la editorial es la id, doncs comprovem que el nom de la editorial no estigui ja a la llista de les ids afegides a la col·lecció editorials
             if publicacio['NomEditorial'] not in lista_ids_edit:
                 editorial_prov={}
-                #una editorial pot aparèixer varies vegades, però només l'afegirem una vegada
-                if publicacio['NomEditorial'] not in editorials:
-                    editorial_prov['_id']=publicacio['NomEditorial']
-                    editorial_prov['responsable']=publicacio['resposable']
-                    editorial_prov['adreca']=publicacio['adreca']
-                    editorial_prov['pais']=publicacio['pais']
-                    editorial_prov['coleccions']=[publicacio['NomColleccio']]
-                    editorials[publicacio['NomEditorial']]=editorial_prov
-                else:
-                    #tot i que una editorial ja hagi estat afegida, la línea pot contenir col·leccions noves
-                    if publicacio['NomColleccio'] not in editorials[publicacio['NomEditorial']]['coleccions']:
-                        editorials[publicacio['NomEditorial']]['coleccions'].append(publicacio['NomColleccio'])
-                        
+                editorial_prov['_id']=publicacio['NomEditorial']
+                editorial_prov['responsable']=publicacio['resposable']
+                editorial_prov['adreca']=publicacio['adreca']
+                editorial_prov['pais']=publicacio['pais']
+                #editorial_prov['coleccions']=[publicacio['NomColleccio']]
+                editorials[publicacio['NomEditorial']]=editorial_prov
+            
             #com que el nom de la col·lecció es la id, doncs comprovem que el nom de la col·lecció no estigui ja a la llista de les ids afegides a la col·lecció col·leccions
             if publicacio['NomColleccio'] not in lista_ids_col:
                 coleccio_prov={}
@@ -104,12 +87,17 @@ if args.bd==None:
                 if publicacio['NomColleccio'] not in coleccions:
                     coleccio_prov['_id']=publicacio['NomColleccio']
                     coleccio_prov['total_exemplars']=publicacio['total_exemplars']
-                    coleccio_prov['genere']=publicacio['genere']
+                    coleccio_prov['genere']=publicacio['genere'][1:len(publicacio['genere'])-1].split(', ')
                     coleccio_prov['idioma']=publicacio['idioma']
                     coleccio_prov['any_inici']=publicacio['any_inici']
                     coleccio_prov['any_fi']=publicacio['any_fi']
                     coleccio_prov['tancada']=publicacio['tancada']
+                    coleccio_prov['editorials']=[publicacio['NomEditorial']]
                     coleccions[publicacio['NomColleccio']]=coleccio_prov
+                else:
+                    #tot i que una col·lecció ja hagi estat afegida, la línea pot contenir editorials noves
+                    if publicacio['NomEditorial'] not in coleccions[publicacio['NomColleccio']]['editorials']:
+                        coleccions[publicacio['NomColleccio']]['editorials'].append(publicacio['NomEditorial'])
             
             #com que el nom de la publicació es la id, doncs comprovem que el nom de la publicació no estigui ja a la llista de les ids afegides a la col·lecció publicacions
             if publicacio['ISBN'] not in lista_ids_publi:
@@ -120,9 +108,10 @@ if args.bd==None:
                 publicacio_prov['autor']=publicacio['autor']
                 publicacio_prov['preu']=publicacio['preu']
                 publicacio_prov['num_pagines']=publicacio['num_pagines']
-                publicacio_prov['guionistes']=publicacio['guionistes']
-                publicacio_prov['dibuixants']=publicacio['dibuixants']
+                publicacio_prov['guionistes']=publicacio['guionistes'][1:len(publicacio['guionistes'])-1].split(', ')
+                publicacio_prov['dibuixants']=publicacio['dibuixants'][1:len(publicacio['dibuixants'])-1].split(', ')
                 publicacio_prov['id_coleccio']=publicacio['NomColleccio']
+                publicacio_prov['editorial']=publicacio['NomEditorial']
                 publicacions.append(publicacio_prov)
         
         #llegim el arxiu d'excel Personatges
@@ -131,8 +120,6 @@ if args.bd==None:
         excel_def=list(excel_pers.columns)
         data_pers = []
         for i, row in excel_pers.iterrows():
-            if i == 0:
-                continue
             dict_row = {}
             for j, value in enumerate(row):
                 dict_row[excel_def[j]] = value
@@ -159,8 +146,6 @@ if args.bd==None:
         excel_def=list(excel_artist.columns)
         data_artist = []
         for i, row in excel_artist.iterrows():
-            if i == 0:
-                continue
             dict_row = {}
             for j, value in enumerate(row):
                 dict_row[excel_def[j]] = value
